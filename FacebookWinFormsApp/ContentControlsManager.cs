@@ -9,7 +9,7 @@ using FacebookWrapper.ObjectModel;
 
 namespace BasicFacebookFeatures
 {
-    internal class ContentControlsManager
+    internal class ContentControlsManager : ILoginLogoutObserver
     {
         const bool v_ShowControls = true;
         const int k_NoLikedPages = 0;
@@ -47,7 +47,7 @@ namespace BasicFacebookFeatures
             m_UserRecommendationDataManager = new UserRecommendationDataManager();
         }
 
-        internal void PerformLogin(User i_LoggedInUser)
+        public void OnUserLoggedIn(User i_LoggedInUser)
         {
             if (i_LoggedInUser.Email != null)
             {
@@ -62,7 +62,7 @@ namespace BasicFacebookFeatures
             PopulateLikedPagesListBox(i_LoggedInUser);
         }
 
-        internal void PerformLogout(User i_LoggedInUser)
+        public void OnUserLoggedOut(User i_LoggedInUser)
         {          
             SetupUI.ShowOrHideControls(!v_ShowControls, new List<Control> { m_BiographyTitle, m_BiographyTextBox, m_LikedPagesLable, m_LikedPagesListBox,
                 m_LikedPagePictureBox, m_PostStatusLabel, m_PostStatusTextBox, m_PostStatusButton, m_MoviesAndTVShowsRec, m_BooksRec, m_MusicRec, m_RecommendationLabel  });

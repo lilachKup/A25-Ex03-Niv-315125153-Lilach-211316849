@@ -29,6 +29,9 @@ namespace BasicFacebookFeatures
             m_ContentControls = new ContentControlsManager(biographyTitle, biographyTextBox, likedPagesTitle, likedPagesListBox,
                                 likedPagePictureBox, postStatusTitle, postStatusListBox, postStatusButton, moviesAndTVShowsRec, booksRec, musicRec, recommendationTitle);
             m_LoginLogoutControls = new LoginLogoutControlsManager(buttonLogin, buttonLogout);
+
+            m_LoginLogoutControls.RegisterObserver(m_ContentControls);
+            m_LoginLogoutControls.RegisterObserver(m_MediaControls);
         }
        
         private void buttonLogin_Click(object sender, EventArgs e)

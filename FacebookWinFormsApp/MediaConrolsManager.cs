@@ -1,5 +1,4 @@
-﻿using FacebookWrapper.ObjectModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +10,7 @@ using System.Drawing;
 
 namespace BasicFacebookFeatures
 {
-    internal class MediaConrolsManager
+    internal class MediaConrolsManager : ILoginLogoutObserver
     {
         const bool v_ShowControls = true;
         const int k_TimerInterval = 3000;
@@ -50,7 +49,7 @@ namespace BasicFacebookFeatures
             m_RightAlbumButton = i_RightAlbumButton;
         }
 
-        internal void PerformLogin(User i_LoggedInUser)
+        public void OnUserLoggedIn(User i_LoggedInUser)
         {
             SetupUI.ShowOrHideControls(v_ShowControls, new List<Control> { m_AlbumsPictureBox, m_AlbumsListBox, m_AlbumsLabel, 
                  m_ProfilePictureBox, m_StopProfileAlbumButton, m_StartProfileAlbumButton, m_LeftAlbumButton, m_RightAlbumButton });
@@ -58,7 +57,7 @@ namespace BasicFacebookFeatures
             PopulateAlbumsListBox(i_LoggedInUser);
         }
 
-        internal void PerformLogout()
+        public void OnUserLoggedOut(User i_LoggedInUser)
         {
             SetupUI.ShowOrHideControls(!v_ShowControls, new List<Control> { m_AlbumsPictureBox, m_AlbumsListBox, m_AlbumsLabel, 
                  m_StopProfileAlbumButton, m_StartProfileAlbumButton, m_LeftAlbumButton, m_RightAlbumButton });

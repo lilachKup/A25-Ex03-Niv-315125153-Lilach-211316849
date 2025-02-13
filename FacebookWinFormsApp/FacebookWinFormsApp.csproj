@@ -84,6 +84,8 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="ILoginLogoutSubject.cs" />
+    <Compile Include="ILoginLogoutObserver.cs" />
     <Compile Include="LoginLogoutControlsManager.cs" />
     <Compile Include="MediaConrolsManager.cs" />
     <Compile Include="ProfileAlbumForm.cs">
