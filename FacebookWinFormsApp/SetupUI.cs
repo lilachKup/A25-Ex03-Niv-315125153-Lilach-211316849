@@ -25,13 +25,24 @@ namespace BasicFacebookFeatures
             }
         }
 
-        internal static void DisableAndEnableButtons(Button i_ButtonTodisable, Button i_ButtonToEnable)
+        internal static void DisableAndEnableButtons(List<Button> i_ButtonsToDisable, Button i_ButtonToEnable)
         {
-            Color tempButtonColor = i_ButtonTodisable.BackColor;
-            i_ButtonTodisable.BackColor = i_ButtonToEnable.BackColor;
-            i_ButtonToEnable.BackColor = tempButtonColor;
+            if(i_ButtonsToDisable.Count == 0)
+            {
+                throw new ArgumentException("The list of buttons to disable is empty");
+            }
+
+            Color disableButtonColor = i_ButtonsToDisable[0].BackColor;
+            Color enableButtonColor = i_ButtonToEnable.BackColor;
+            //i_ButtonTodisable.BackColor = i_ButtonToEnable.BackColor;
+            i_ButtonToEnable.BackColor = enableButtonColor;
             i_ButtonToEnable.Enabled = true;
-            i_ButtonTodisable.Enabled = false;
+
+            foreach (Button button in i_ButtonsToDisable)
+            {
+                button.BackColor = disableButtonColor;
+                button.Enabled = false;
+            }
         }    
     }
 }

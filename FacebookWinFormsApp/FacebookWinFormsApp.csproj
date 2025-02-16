@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContentControlsManager.cs" />
+    <Compile Include="FadeInEffect.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +87,7 @@
     </Compile>
     <Compile Include="ILoginLogoutSubject.cs" />
     <Compile Include="ILoginLogoutObserver.cs" />
+    <Compile Include="IPhotoEffectStrategy.cs" />
     <Compile Include="LoginLogoutControlsManager.cs" />
     <Compile Include="MediaConrolsManager.cs" />
     <Compile Include="ProfileAlbumForm.cs">
@@ -103,7 +105,9 @@
       <DependentUpon>RecommendationUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="SetupUI.cs" />
+    <Compile Include="SlideInEffect.cs" />
     <Compile Include="UserRecommendationDataManager.cs" />
+    <Compile Include="ZoomInEffect.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

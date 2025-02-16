@@ -14,29 +14,23 @@ namespace BasicFacebookFeatures
     {
         private const string k_XmlFilePath = "usersData.xml";
 
-        // savin user data
         public void SaveUserDataToFile(string i_UserId, TextBox i_TextBox1, TextBox i_TextBox2, TextBox i_TextBox3, TextBox i_TextBox4, TextBox i_TextBox5, TextBox i_TextBox6,
             TrackBar i_TrackBar1, TrackBar i_TrackBar2, TrackBar i_TrackBar3, TrackBar i_TrackBar4, TrackBar i_TrackBar5, TrackBar i_TrackBar6)
         {
-            // create xml file if not exists
             if (!File.Exists(k_XmlFilePath))
             {
                 var newDoc = new XDocument(new XElement("Users"));
                 newDoc.Save(k_XmlFilePath);
             }
 
-            // load file
             var doc = XDocument.Load(k_XmlFilePath);
-            // searching by id
             var userElement = doc.Root.Elements("User").FirstOrDefault(currentUser => currentUser.Attribute("id")?.Value == i_UserId);
             if (userElement == null)
             {
-                // adding new user
                 userElement = new XElement("User", new XAttribute("id", i_UserId));
                 doc.Root.Add(userElement);
             }
 
-            // updating user data
             userElement.SetElementValue("TextBox1", i_TextBox1.Text);
             userElement.SetElementValue("TextBox2", i_TextBox2.Text);
             userElement.SetElementValue("TextBox3", i_TextBox3.Text);
@@ -49,28 +43,22 @@ namespace BasicFacebookFeatures
             userElement.SetElementValue("TrackBar4", i_TrackBar4.Value);
             userElement.SetElementValue("TrackBar5", i_TrackBar5.Value);
             userElement.SetElementValue("TrackBar6", i_TrackBar6.Value);
-            // save changes
             doc.Save(k_XmlFilePath);
         }
 
-        // loading user data
         public void LoadUserDatafromFile(string i_UserId, TextBox i_TextBox1, TextBox i_TextBox2, TextBox i_TextBox3, TextBox i_TextBox4, TextBox i_TextBox5, TextBox i_TextBox6,
             TrackBar i_TrackBar1, TrackBar i_TrackBar2, TrackBar i_TrackBar3, TrackBar i_TrackBar4, TrackBar i_TrackBar5, TrackBar i_TrackBar6)
         {
-            // check if file exists
             if (!File.Exists(k_XmlFilePath))
             {
                 return;
             }
 
-            // load file
             var doc = XDocument.Load(k_XmlFilePath);
-            // searching by id
             var userElement = doc.Root.Elements("User").FirstOrDefault(currentUser => currentUser.Attribute("id")?.Value == i_UserId);
 
             if (userElement != null)
             {
-                // Load user data
                 i_TextBox1.Text = userElement.Element("TextBox1")?.Value ?? string.Empty;
                 i_TextBox2.Text = userElement.Element("TextBox2")?.Value ?? string.Empty;
                 i_TextBox3.Text = userElement.Element("TextBox3")?.Value ?? string.Empty;

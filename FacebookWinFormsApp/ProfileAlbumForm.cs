@@ -17,11 +17,13 @@ namespace BasicFacebookFeatures
     public partial class ProfileAlbumForm : Form
     {
         List<string> m_ClickedImages;
+        private Action<IPhotoEffectStrategy> m_OnEffectSelected;
 
-        public ProfileAlbumForm(List<string> i_ImagesFromAlbum, List<string> i_ProfileAlbum)
+        public ProfileAlbumForm(List<string> i_ImagesFromAlbum, List<string> i_ProfileAlbum, Action<IPhotoEffectStrategy> i_OnEffectSelected)
         {
             InitializeComponent();         
             m_ClickedImages = i_ProfileAlbum;
+            m_OnEffectSelected = i_OnEffectSelected;
             showAlbum(i_ImagesFromAlbum);
         }
 
@@ -79,9 +81,29 @@ namespace BasicFacebookFeatures
             return isAlreadySelected;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void slideInEffectButton_Click(object sender, EventArgs e)
         {
+            m_OnEffectSelected?.Invoke(new SlideInEffect());
             this.Close();
         }
+
+        private void fadeInEffectButton_Click(object sender, EventArgs e)
+        {
+            m_OnEffectSelected?.Invoke(new FadeInEffect());
+            this.Close();
+        }
+
+        private void zoomInEffectButton_Click(object sender, EventArgs e)
+        {
+            m_OnEffectSelected?.Invoke(new ZoomInEffect());
+            this.Close();
+        }
+
+        private void defaultButton_Click(object sender, EventArgs e)
+        {
+           
+            this.Close();
+        }
+
     }
 }

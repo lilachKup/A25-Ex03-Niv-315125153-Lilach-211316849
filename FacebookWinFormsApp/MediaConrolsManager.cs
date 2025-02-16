@@ -13,7 +13,7 @@ namespace BasicFacebookFeatures
     internal class MediaConrolsManager : ILoginLogoutObserver
     {
         const bool v_ShowControls = true;
-        const int k_TimerInterval = 3000;
+        const int k_TimerInterval = 5000;
         const int k_NoPhotos = 0;
         const int k_OnePhoto = 1;
         const int k_NoAlbums = 0;
@@ -24,13 +24,14 @@ namespace BasicFacebookFeatures
         private PictureBox m_ProfilePictureBox;
         private List <string> m_ProfileAlbum;
         private int m_ProfilePhotoIndex = 0;
-        private Button m_StopProfileAlbumButton;
+        private Button m_StopProfileAlbumButton;    
         private Button m_StartProfileAlbumButton;
         private List<string> m_AlbumAsList;
         private int m_AlbumPhotoIndex = 0;
         private Button m_LeftAlbumButton;
         private Button m_RightAlbumButton;
         Timer m_Timer;
+        private IPhotoEffectStrategy m_PhotoEffectStrategy;
 
         internal MediaConrolsManager(PictureBox i_AlbumsPictureBox, ListBox i_AlbumsListBox, Label i_AlbumsLabel, PictureBox i_ProfilePictureBox, 
             Button i_StopProfileAlbumButton, Button i_StartProfileAlbumButton, Button i_LeftAlbumButton, Button i_RightAlbumButton)
@@ -73,6 +74,11 @@ namespace BasicFacebookFeatures
             if (m_Timer.Enabled)
             {
                 m_Timer.Stop();
+            }
+            if(m_PhotoEffectStrategy != null)
+            {
+                m_PhotoEffectStrategy.StopEffect();
+                m_PhotoEffectStrategy = null;
             }
         }
 
@@ -133,7 +139,7 @@ namespace BasicFacebookFeatures
                     foreach (Photo photo in album.Photos)
                     {
                         if (!string.IsNullOrEmpty(photo.PictureNormalURL))
-                        {
+                        {   
                             photoUrls.Add(photo.PictureNormalURL);
                         }                  
                     }
@@ -145,12 +151,12 @@ namespace BasicFacebookFeatures
                 m_ProfileAlbum.Clear();
             }
 
-            ProfileAlbumForm profileAlbumForm = new ProfileAlbumForm(photoUrls, m_ProfileAlbum);
+            ProfileAlbumForm profileAlbumForm = new ProfileAlbumForm(photoUrls, m_ProfileAlbum, effect => m_PhotoEffectStrategy = effect);
             profileAlbumForm.ShowDialog();
             checkValidPhotosToProfile(i_LoggedInUser, m_ProfileAlbum);
             if (m_ProfileAlbum.Count > 0)
             {
-                SetupUI.DisableAndEnableButtons(m_StartProfileAlbumButton, m_StopProfileAlbumButton);
+                SetupUI.DisableAndEnableButtons(new List<Button> { m_StartProfileAlbumButton }, m_StopProfileAlbumButton);
             }
         }
 
@@ -176,23 +182,41 @@ namespace BasicFacebookFeatures
             m_Timer.Tick += Timer_Tick;
         }
 
+        private void resetPictureBoxState()
+        {
+            if (m_PhotoEffectStrategy != null)
+            {
+                m_PhotoEffectStrategy.StopEffect();  
+            }
+
+            m_ProfilePictureBox.Image = null;    
+            m_ProfilePictureBox.Size = new Size(148, 122);     
+            m_ProfilePictureBox.Location = new Point(6, 8); 
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            m_ProfilePictureBox.ImageLocation = m_ProfileAlbum[m_ProfilePhotoIndex];
-            m_ProfilePhotoIndex++;
+            m_ProfilePhotoIndex = (m_ProfilePhotoIndex + 1) % m_ProfileAlbum.Count;
+            m_ProfilePictureBox.LoadAsync(m_ProfileAlbum[m_ProfilePhotoIndex]);            
 
-            if (m_ProfilePhotoIndex == m_ProfileAlbum.Count)
+            m_ProfilePictureBox.LoadCompleted += (s, ev) =>
             {
-                m_ProfilePhotoIndex = 0;
-            }           
+                if (m_PhotoEffectStrategy != null)
+                {
+                    m_PhotoEffectStrategy.ApplyEffect(m_ProfilePictureBox);
+                }
+            };           
         }
-
+      
         internal void StopProfileAlbumForm(User i_LoggedInUser)
         {
-           m_Timer.Stop();
-           SetProfilePhoto(i_LoggedInUser);
-           SetupUI.DisableAndEnableButtons(m_StopProfileAlbumButton, m_StartProfileAlbumButton);
+            m_Timer.Stop();
+            resetPictureBoxState();
+            SetProfilePhoto(i_LoggedInUser);
+            m_PhotoEffectStrategy = null;
+            SetupUI.DisableAndEnableButtons(new List<Button> { m_StopProfileAlbumButton }, m_StartProfileAlbumButton);
         }
+
 
         internal void ShowNextPhoto(string i_Direction)
         {

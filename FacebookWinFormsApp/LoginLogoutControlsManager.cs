@@ -77,7 +77,7 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                m_LoginResult = FacebookService.Connect("EABZByIKEAZAcoBO4r8BxyPdt2UWCWyNxsAA43Ect1jHQZATQ4cCGkrccm2YTiXWpmBqNPmTQTAISZB9Xgop9ZAXTtRpwWNXbYSsGRdwzA8e9jFNZADACpdk9e7dEeTWn1yJzkxwUXkiKCRQOZBTZCLzzU5u5pwGhQeZBZBtdTQZC9kC9KJb4EYYi5GOfy9jTCYsDZBPwvGhYAWMmk49nvAT8CCFADzZAnaSmQUshXmsKt0wZDZD");
+                m_LoginResult = FacebookService.Connect("EABZByIKEAZAcoBO8KdNEhxvqThQKwGPSJMVvCjZAPUTDVZAwjxZBSOWXiowx1pasJJ5q2npTMs660mQf5EtFM8hfmZBS2LYbZAf7hkKWdjC1QtyKKzlGUvZBknxNu8I2RxPgFQ0hjwy4hjFLzOBzsvbz3wr5ptmOFx7SRhGhbq5zqZC0VQC5M7k9SZBYfc0ltE0DKrzkNZB8eBv7LYpR1dCGAZDZD");
                 /*m_LoginResult = FacebookService.Login(
                     /// (This is our App ID)
                     "8921577487885770",
@@ -92,6 +92,7 @@ namespace BasicFacebookFeatures
                     "user_link"
                     );*/
 
+
                 if (string.IsNullOrEmpty(m_LoginResult.ErrorMessage) && m_LoginResult.LoggedInUser != null)
                 {
                      m_LoginButton.Text = $"Logged in as {m_LoginResult.LoggedInUser.Name}";
@@ -99,7 +100,7 @@ namespace BasicFacebookFeatures
 
                     //i_MediaConrolsManager.PerformLogin(m_LoggedInUser);
                     //i_ContentControlsManager.PerformLogin(m_LoggedInUser);
-                    SetupUI.DisableAndEnableButtons(m_LoginButton, m_LogoutButton);
+                    SetupUI.DisableAndEnableButtons(new List<Button> { m_LoginButton }, m_LogoutButton);
                     NotifyLogin();
                 }
                 else
@@ -124,7 +125,7 @@ namespace BasicFacebookFeatures
             m_LoginButton.Text = "Login";
             m_LoginResult = null;
             m_LoggedInUser = null;
-            SetupUI.DisableAndEnableButtons(m_LogoutButton, m_LoginButton);
+            SetupUI.DisableAndEnableButtons(new List<Button> { m_LogoutButton }, m_LoginButton);
             //i_MediaConrolsManager.PerformLogout();
         }
     }
