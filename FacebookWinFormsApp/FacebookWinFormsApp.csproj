@@ -77,6 +77,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlbumCollection.cs" />
     <Compile Include="ContentControlsManager.cs" />
     <Compile Include="FadeInEffect.cs" />
     <Compile Include="FormMain.cs">
@@ -85,6 +86,7 @@
     <Compile Include="FormMain.Designer.cs">
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="IIterator.cs" />
     <Compile Include="ILoginLogoutSubject.cs" />
     <Compile Include="ILoginLogoutObserver.cs" />
     <Compile Include="IPhotoEffectStrategy.cs" />

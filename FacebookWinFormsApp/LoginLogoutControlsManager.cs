@@ -77,7 +77,7 @@ namespace BasicFacebookFeatures
         {
             try
             {
-                m_LoginResult = FacebookService.Connect("EABZByIKEAZAcoBO8KdNEhxvqThQKwGPSJMVvCjZAPUTDVZAwjxZBSOWXiowx1pasJJ5q2npTMs660mQf5EtFM8hfmZBS2LYbZAf7hkKWdjC1QtyKKzlGUvZBknxNu8I2RxPgFQ0hjwy4hjFLzOBzsvbz3wr5ptmOFx7SRhGhbq5zqZC0VQC5M7k9SZBYfc0ltE0DKrzkNZB8eBv7LYpR1dCGAZDZD");
+                m_LoginResult = FacebookService.Connect("EABZByIKEAZAcoBO4sGpxDzKN9axFrui2h434GEHTKR6uBLjrAhQliI3qyUON3BK8PvsJqZA1dIecam2wPeZCZAeLVDdGRgt8MhlKJJyznZA6GcV8jxiZApiO4lRRI5UD7L6zoUCL1wSREMx0hwPIXVv8UaCWGj35vYYjfxKuaVmfNPOBK0tpwASbm7ZCQgxOXIvZCwI2LMhwu24S8X8mGCWgZD");
                 /*m_LoginResult = FacebookService.Login(
                     /// (This is our App ID)
                     "8921577487885770",
@@ -98,8 +98,6 @@ namespace BasicFacebookFeatures
                      m_LoginButton.Text = $"Logged in as {m_LoginResult.LoggedInUser.Name}";
                     m_LoggedInUser = m_LoginResult.LoggedInUser;
 
-                    //i_MediaConrolsManager.PerformLogin(m_LoggedInUser);
-                    //i_ContentControlsManager.PerformLogin(m_LoggedInUser);
                     SetupUI.DisableAndEnableButtons(new List<Button> { m_LoginButton }, m_LogoutButton);
                     NotifyLogin();
                 }

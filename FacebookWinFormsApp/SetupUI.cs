@@ -34,13 +34,12 @@ namespace BasicFacebookFeatures
 
             Color disableButtonColor = i_ButtonsToDisable[0].BackColor;
             Color enableButtonColor = i_ButtonToEnable.BackColor;
-            //i_ButtonTodisable.BackColor = i_ButtonToEnable.BackColor;
-            i_ButtonToEnable.BackColor = enableButtonColor;
+            i_ButtonToEnable.BackColor = disableButtonColor;
             i_ButtonToEnable.Enabled = true;
 
             foreach (Button button in i_ButtonsToDisable)
             {
-                button.BackColor = disableButtonColor;
+                button.BackColor = enableButtonColor;
                 button.Enabled = false;
             }
         }    

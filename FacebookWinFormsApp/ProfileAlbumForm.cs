@@ -101,9 +101,7 @@ namespace BasicFacebookFeatures
 
         private void defaultButton_Click(object sender, EventArgs e)
         {
-           
             this.Close();
         }
-
     }
 }

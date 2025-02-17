@@ -17,6 +17,10 @@ namespace BasicFacebookFeatures
         const int k_NoPhotos = 0;
         const int k_OnePhoto = 1;
         const int k_NoAlbums = 0;
+        private const int k_ProfilePicWidth = 148;
+        private const int k_ProfilePicHeight = 122;
+        private const int k_ProfilePicX = 6;
+        private const int k_ProfilePicY = 8;
 
         private PictureBox m_AlbumsPictureBox;
         private ListBox m_AlbumsListBox;
@@ -26,12 +30,12 @@ namespace BasicFacebookFeatures
         private int m_ProfilePhotoIndex = 0;
         private Button m_StopProfileAlbumButton;    
         private Button m_StartProfileAlbumButton;
-        private List<string> m_AlbumAsList;
-        private int m_AlbumPhotoIndex = 0;
         private Button m_LeftAlbumButton;
         private Button m_RightAlbumButton;
         Timer m_Timer;
         private IPhotoEffectStrategy m_PhotoEffectStrategy;
+        private IIterator<string> m_AlbumIterator;
+        private AlbumCollection m_AlbumCollection;
 
         internal MediaConrolsManager(PictureBox i_AlbumsPictureBox, ListBox i_AlbumsListBox, Label i_AlbumsLabel, PictureBox i_ProfilePictureBox, 
             Button i_StopProfileAlbumButton, Button i_StartProfileAlbumButton, Button i_LeftAlbumButton, Button i_RightAlbumButton)
@@ -43,7 +47,6 @@ namespace BasicFacebookFeatures
             m_ProfileAlbum = new List<string>();
             m_StopProfileAlbumButton = i_StopProfileAlbumButton;
             m_StartProfileAlbumButton = i_StartProfileAlbumButton;
-            m_AlbumAsList = new List<string>();
             m_Timer = new Timer();
             m_Timer.Interval = k_TimerInterval;
             m_LeftAlbumButton = i_LeftAlbumButton;
@@ -64,8 +67,6 @@ namespace BasicFacebookFeatures
                  m_StopProfileAlbumButton, m_StartProfileAlbumButton, m_LeftAlbumButton, m_RightAlbumButton });
             m_AlbumsPictureBox.Image = null;
             m_AlbumsListBox.Items.Clear();
-            m_AlbumAsList.Clear();
-            m_AlbumPhotoIndex = 0;
             m_ProfileAlbum.Clear();
             m_ProfilePhotoIndex = 0;
             string imagePath = @"..\..\..\faceBookProfileUnkonws.png";
@@ -109,21 +110,21 @@ namespace BasicFacebookFeatures
 
         internal void DisplaySelectedAlbum()
         {
-            m_AlbumAsList.Clear();
-
             if (m_AlbumsListBox.SelectedItems.Count == 1)
             {
+                m_AlbumCollection = new AlbumCollection(m_AlbumsListBox.SelectedItem as Album);
+                m_AlbumIterator = m_AlbumCollection.CreateForwardIterator();
                 Album selectedAlbum = m_AlbumsListBox.SelectedItem as Album;
 
                 if (selectedAlbum.PictureAlbumURL != null && selectedAlbum.Count > k_NoPhotos)
                 {
                     m_AlbumsPictureBox.LoadAsync(selectedAlbum.PictureAlbumURL);
                     m_AlbumsPictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
-                    m_AlbumAsList = getAlbumAsList();
                 }
                 else
                 {
                     m_AlbumsPictureBox.Image = m_AlbumsPictureBox.ErrorImage;
+                    MessageBox.Show("No photos in the album"); ////////////////////////////////////////
                 }
             }
         }
@@ -179,7 +180,7 @@ namespace BasicFacebookFeatures
         private void changeProfilePictureToProfileAlbum(List <string> i_ProfileAlbum)
         {
             m_Timer.Start();
-            m_Timer.Tick += Timer_Tick;
+            m_Timer.Tick += timer_Tick;
         }
 
         private void resetPictureBoxState()
@@ -189,12 +190,12 @@ namespace BasicFacebookFeatures
                 m_PhotoEffectStrategy.StopEffect();  
             }
 
-            m_ProfilePictureBox.Image = null;    
-            m_ProfilePictureBox.Size = new Size(148, 122);     
-            m_ProfilePictureBox.Location = new Point(6, 8); 
+            m_ProfilePictureBox.Image = null;
+            m_ProfilePictureBox.Size = new Size(k_ProfilePicWidth, k_ProfilePicHeight);
+            m_ProfilePictureBox.Location = new Point(k_ProfilePicX, k_ProfilePicY);
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
             m_ProfilePhotoIndex = (m_ProfilePhotoIndex + 1) % m_ProfileAlbum.Count;
             m_ProfilePictureBox.LoadAsync(m_ProfileAlbum[m_ProfilePhotoIndex]);            
@@ -220,48 +221,38 @@ namespace BasicFacebookFeatures
 
         internal void ShowNextPhoto(string i_Direction)
         {
-            if (m_AlbumAsList.Count == k_NoPhotos)
+            if (m_AlbumCollection.IsEmptyAlbum())
             {
                 MessageBox.Show("No photos in the album");
             }
-            else if (i_Direction == "next")
-            {
-                m_AlbumPhotoIndex++;
-                m_AlbumsPictureBox.ImageLocation = m_AlbumAsList[m_AlbumPhotoIndex % (m_AlbumAsList.Count - 1)];
-            }
             else
             {
-                m_AlbumPhotoIndex--;
-                if (m_AlbumPhotoIndex < 0)
+                try
                 {
-                    m_AlbumPhotoIndex += m_AlbumAsList.Count;
-                }
-
-                m_AlbumsPictureBox.ImageLocation = m_AlbumAsList[m_AlbumPhotoIndex % (m_AlbumAsList.Count - 1)];
-            }
-        }
-
-        private List<string> getAlbumAsList()
-        {
-            List<string> photoUrls = new List<string>();
-            Album selectedAlbum = m_AlbumsListBox.SelectedItem as Album;
-
-            if (selectedAlbum.Count > k_NoPhotos)
-            {
-                foreach (Photo photo in selectedAlbum.Photos)
-                {
-                    if (!string.IsNullOrEmpty(photo.PictureNormalURL))
+                    if (i_Direction == "next")
                     {
-                        photoUrls.Add(photo.PictureNormalURL);
+                        if (!m_AlbumIterator.HasNext())
+                        {
+                            m_AlbumIterator = m_AlbumCollection.CreateForwardIterator();
+                        }
+
+                        m_AlbumsPictureBox.ImageLocation = m_AlbumIterator.Next();
+                    }
+                    else
+                    {
+                        if (!m_AlbumIterator.HasPrevious())
+                        {
+                            m_AlbumIterator = m_AlbumCollection.CreateReverseIterator();
+                        }
+
+                        m_AlbumsPictureBox.ImageLocation = m_AlbumIterator.Previous();
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
-            else
-            {
-                MessageBox.Show("No photos in the album");
-            }
-                  
-            return photoUrls;
         }
     }
 }
