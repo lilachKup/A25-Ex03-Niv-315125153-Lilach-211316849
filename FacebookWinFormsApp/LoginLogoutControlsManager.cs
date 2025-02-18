@@ -118,13 +118,11 @@ namespace BasicFacebookFeatures
         internal void Logout(MediaConrolsManager i_MediaConrolsManager, ContentControlsManager i_ContentControlsManager)
         {
             NotifyLogout();
-            //i_ContentControlsManager.PerformLogout(m_LoggedInUser);
             FacebookService.LogoutWithUI();
             m_LoginButton.Text = "Login";
             m_LoginResult = null;
             m_LoggedInUser = null;
             SetupUI.DisableAndEnableButtons(new List<Button> { m_LogoutButton }, m_LoginButton);
-            //i_MediaConrolsManager.PerformLogout();
         }
     }
 }

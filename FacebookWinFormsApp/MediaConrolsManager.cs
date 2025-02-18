@@ -32,7 +32,7 @@ namespace BasicFacebookFeatures
         private Button m_StartProfileAlbumButton;
         private Button m_LeftAlbumButton;
         private Button m_RightAlbumButton;
-        Timer m_Timer;
+        private Timer m_Timer;
         private IPhotoEffectStrategy m_PhotoEffectStrategy;
         private IIterator<string> m_AlbumIterator;
         private AlbumCollection m_AlbumCollection;
@@ -124,7 +124,6 @@ namespace BasicFacebookFeatures
                 else
                 {
                     m_AlbumsPictureBox.Image = m_AlbumsPictureBox.ErrorImage;
-                    MessageBox.Show("No photos in the album"); ////////////////////////////////////////
                 }
             }
         }

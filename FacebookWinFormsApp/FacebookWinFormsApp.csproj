@@ -87,8 +87,8 @@
       <DependentUpon>FormMain.cs</DependentUpon>
     </Compile>
     <Compile Include="IIterator.cs" />
-    <Compile Include="ILoginLogoutSubject.cs" />
     <Compile Include="ILoginLogoutObserver.cs" />
+    <Compile Include="ILoginLogoutSubject.cs" />
     <Compile Include="IPhotoEffectStrategy.cs" />
     <Compile Include="LoginLogoutControlsManager.cs" />
     <Compile Include="MediaConrolsManager.cs" />

@@ -9,7 +9,7 @@ namespace BasicFacebookFeatures
 {
     public interface IPhotoEffectStrategy
     {
-        void ApplyEffect(PictureBox pictureBox);
+        void ApplyEffect(PictureBox i_PictureBox);
         void StopEffect();
     }
 }

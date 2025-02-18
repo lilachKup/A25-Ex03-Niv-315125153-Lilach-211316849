@@ -19,10 +19,10 @@ namespace BasicFacebookFeatures
 
         public AlbumCollection(Album i_Album)
         {
-            r_Photos = getAlbumAsList(i_Album);
+            r_Photos = GetAlbumAsList(i_Album);
         }
 
-        public List<string> getAlbumAsList(Album i_Album)
+        public List<string> GetAlbumAsList(Album i_Album)
         {
             List<string> photoUrls = new List<string>();
 

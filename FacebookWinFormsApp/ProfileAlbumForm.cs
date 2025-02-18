@@ -16,7 +16,7 @@ namespace BasicFacebookFeatures
 {
     public partial class ProfileAlbumForm : Form
     {
-        List<string> m_ClickedImages;
+        private List<string> m_ClickedImages;
         private Action<IPhotoEffectStrategy> m_OnEffectSelected;
 
         public ProfileAlbumForm(List<string> i_ImagesFromAlbum, List<string> i_ProfileAlbum, Action<IPhotoEffectStrategy> i_OnEffectSelected)

@@ -21,11 +21,11 @@ namespace BasicFacebookFeatures
         private PictureBox m_TargetPictureBox;
         private Image m_OriginalImage;
 
-        public void ApplyEffect(PictureBox pictureBox)
+        public void ApplyEffect(PictureBox i_PictureBox)
         {
             StopEffect();
-            m_TargetPictureBox = pictureBox;
-            m_OriginalImage = pictureBox.Image;
+            m_TargetPictureBox = i_PictureBox;
+            m_OriginalImage = i_PictureBox.Image;
             m_Opacity = k_InitialOpacity;
 
             m_Timer = new Timer { Interval = k_TimerInterval };
